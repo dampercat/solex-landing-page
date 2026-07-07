@@ -1,0 +1,78 @@
+.howitworks {
+    padding: 6rem 2rem;
+    background: #f9fafb;
+}
+
+.howitworks-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.howitworks-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.howitworks-header p {
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.step {
+    background: white;
+    padding: 2rem;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.05);
+    text-align: center;
+    transition: .25s ease;
+}
+
+.step p {
+    padding: 1rem;
+    line-height: 1.4;
+}
+
+.step:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.08);
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(79,70,229,.1);
+    color: var(--primary);
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(79,70,229,.1);
+    color: var(--primary);
+}
+
+@media (max-width: 900px) {
+    .steps {
+        grid-template-columns: 1fr;
+    }
+
+    .howitworks-header h2 {
+        font-size: 2rem;
+    }
+}
