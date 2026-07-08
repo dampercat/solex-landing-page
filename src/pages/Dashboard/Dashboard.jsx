@@ -81,28 +81,47 @@ function Dashboard() {
 
     return (
     <div className="dashboard">
-        <div className="topbar">
-            <div className="brand">
-                <span className="logo-dot"></span>
-                <span>Solex Analytics</span>
+        <div className="hero-header">
+            <div className="hero-left">
+
+                <div className="dashboard-logo">
+                    Solex<span>.</span>
+                </div>
+
+                <p className="dashboard-label">
+                    Internal Analytics
+                </p>
+
+                <h1>
+                    Good afternoon,
+                    <br />
+                    Team Solex 👋
+                </h1>
+
+                <p className="dashboard-message">
+                    <strong>{signups.length}</strong> students are already waiting for
+                    what you're building.
+                </p>
+
             </div>
 
-            <div className="meta">
-                <span>Dashboard</span>
+            <div className="hero-right">
+                <div className="status-pill">
+                    <span className="status-dot"></span>
+                    Live
+                </div>
+
+                <p className="last-updated">
+                    {lastUpdated
+                        ? `Updated ${lastUpdated.toLocaleTimeString()}`
+                        : "Loading analytics..."}
+                </p>
+
             </div>
+
         </div>
 
-        <h1>Solex Dashboard</h1>
-
-        <p className="last-updated">
-            {lastUpdated
-            ? `Last updated: ${lastUpdated.toLocaleTimeString()}`
-            : "Loading analytics..."
-            }
-        </p>
-
         <div className="stats">
-
             <div className="card">
                 <h3>Total Visits</h3>
                 <h2>{visits}</h2>
@@ -127,7 +146,6 @@ function Dashboard() {
 
         <div className="bottom-grid">
             <div className="insights">
-
                 <h2>Landing Page Performance</h2>
 
                 <p>
@@ -145,30 +163,28 @@ function Dashboard() {
                         : `Approximately 1 out of every ${Math.max(
                             1,
                             Math.round(visits / Math.max(signups.length, 1))
-                            )} visitors joins the waitlist.`
+                        )} visitors joins the waitlist.`
                     }
                 </p>
             </div>
 
             <div className="recent">
-                
                 <h2>Recent Signups</h2>
 
                 {signups.length === 0 ? (
-                <p>No signups yet.</p>
+                    <p>No signups yet.</p>
                 ) : (
-                <ul>
-                    {signups.map(user => (
-                        <li key={user.id}>
-                            {user.email}
-                        </li>
-                    ))}
-                </ul>
-            )}
-
+                    <ul>
+                        {signups.map(user => (
+                            <li key={user.id}>
+                                {user.email}
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </div>
-  </div>
+    </div>
 );
 }
 
