@@ -9,7 +9,41 @@ export default async function handler(req, res) {
         });
     }
 
-    return res.status(200).json({
-        message: "API route is working!"
-    });
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({
+                error: "Email is required."
+            });
+        }
+
+        const data = await resend.emails.send({
+            from: "Solex <onboarding@resend.dev>",
+            to: email,
+            subject: "Welcome to Solex 🚀",
+            html: `
+                <h1>Welcome to Solex!</h1>
+
+                <p>Thanks for joining us.</p>
+
+                <p>We're excited to have you on board.</p>
+
+                <p>More exciting things are coming soon!</p>
+            `
+        });
+
+        return res.status(200).json({
+            success: true,
+            data
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
 }
