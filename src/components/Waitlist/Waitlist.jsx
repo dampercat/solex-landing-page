@@ -14,6 +14,7 @@ function Waitlist() {
     return /\S+@\S+\.\S+/.test(email);
   };
 
+  /*
   const handleSubmit = async () => {
     if (!email) {
       setStatus("Please enter an email.");
@@ -59,6 +60,51 @@ function Waitlist() {
       setLoading(false);
     }
   };
+   */
+
+  const handleSubmit = async () => {
+  if (!email) {
+    setStatus("Please enter an email.");
+    return;
+  }
+
+  if (!isValidEmail(email)) {
+    setStatus("Enter a valid email.");
+    return;
+  }
+
+  setLoading(true);
+  setStatus("");
+
+  try {
+    console.log("Submitting...");
+
+    const response = await fetch("/api/sendWelcomeEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email.toLowerCase(),
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Something went wrong");
+    }
+
+    setEmail("");
+    setStatus("You're on the list 🚀");
+
+  } catch (err) {
+    console.error("WAITLIST ERROR:", err);
+    setStatus("Something went wrong. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <section className="waitlist" id="waitlist">
