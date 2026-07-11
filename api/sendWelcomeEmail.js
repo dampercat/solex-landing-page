@@ -3,47 +3,58 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
-    if (req.method !== "POST") {
-        return res.status(405).json({
-            error: "Method not allowed"
-        });
+  // Only allow POST requests
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      success: false,
+      error: "Method not allowed",
+    });
+  }
+
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        error: "Email is required.",
+      });
     }
 
-    try {
-        const { email } = req.body;
+    const { data, error } = await resend.emails.send({
+      from: "Solex <onboarding@resend.dev>",
+      to: email,
+      subject: "Welcome to Solex 🚀",
+      html: `
+        <h1>Welcome to Solex!</h1>
 
-        if (!email) {
-            return res.status(400).json({
-                error: "Email is required."
-            });
-        }
+        <p>Thanks for joining us.</p>
 
-        const data = await resend.emails.send({
-            from: "Solex <onboarding@resend.dev>",
-            to: email,
-            subject: "Welcome to Solex 🚀",
-            html: `
-                <h1>Welcome to Solex!</h1>
+        <p>We're excited to have you on board.</p>
 
-                <p>Thanks for joining us.</p>
+        <p>More exciting things are coming soon!</p>
+      `,
+    });
 
-                <p>We're excited to have you on board.</p>
+    if (error) {
+      console.error(error);
 
-                <p>More exciting things are coming soon!</p>
-            `
-        });
-
-        return res.status(200).json({
-            success: true,
-            data
-        });
-
-    } catch (error) {
-        console.error(error);
-
-        return res.status(500).json({
-            success: false,
-            error: error.message
-        });
+      return res.status(500).json({
+        success: false,
+        error,
+      });
     }
+
+    return res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (err) {
+    console.error(err);
+
+    return res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
 }
