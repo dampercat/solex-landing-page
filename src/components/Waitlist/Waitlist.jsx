@@ -49,6 +49,20 @@ function Waitlist() {
         source: "landing-page"
       });
 
+      try {
+        await fetch("/api/sendWelcomeEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.toLowerCase(),
+          }),
+        });
+      } catch (err) {
+        console.error("Failed to send welcome email:", err);
+      }
+
       setEmail("");
       setStatus("You're on the list 🚀");
 
