@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     }
 
     const { data, error } = await resend.emails.send({
-      from: "Solex <support.solex@gmail.com>",
+      from: "Solex <support.solex@gmail.com>", /* Need to buy a custom domain for the team */
       to: email,
       subject: "Welcome to Solex 🚀",
       html: `
