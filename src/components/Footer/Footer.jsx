@@ -15,7 +15,7 @@ function Footer() {
         <div className="footer-links">
           <a href="#features">Features</a>
           <a href="#how-it-works">How it works</a>
-          <a href="#waitlist">Waitlist</a>
+          <a href="mailto:support.solex@gmail.com" target="blank">Contact Us</a>
         </div>
 
         <div className="footer-bottom">
