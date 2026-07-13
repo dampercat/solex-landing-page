@@ -25,10 +25,6 @@ function Hero() {
           </p>
 
           <div className="hero-buttons">
-            <button className="primary-btn">
-              <a href="#waitlist" className="hero-link">Join Waitlist</a>
-            </button>
-
             <button className="secondary-btn">
               <a href="#about" className="secondary">Learn More</a>
             </button>

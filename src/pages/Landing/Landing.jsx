@@ -91,7 +91,6 @@ function Landing() {
       <Features />
       <HowItWorks />
       <FAQ />
-      <Waitlist />
       <Footer />
     </>
   );
