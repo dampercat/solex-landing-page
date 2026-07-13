@@ -5,10 +5,12 @@ import { db } from "../../firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
 function Dashboard() {
-    const [visits, setVisits] = useState(0);
+    const [visits, setVisits] = useState([]);
     const [signups, setSignups] = useState([]);
     const [sessions, setSessions] = useState([]);
     const [lastUpdated, setLastUpdated] = useState(null);
+    const [todayVisits, setTodayVisits] = useState(0);
+    const [todaySignups, setTodaySignups] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,8 +29,15 @@ function Dashboard() {
                 const visitSnapshot = await getDocs(
                     collection(db, "visits")
                 );
-            
-                setVisits(visitSnapshot.size);
+
+                const visitData = visitSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                setVisits(visitData);
+
+                setTodayVisits(countToday(visitData, "timestamp"));
 
                 const signupQuery = query(
                     collection(db, "waitlist"),
@@ -43,6 +52,7 @@ function Dashboard() {
                 }));
 
                 setSignups(users);
+                setTodaySignups(countToday(users, "createdAt"));
 
             } catch (err) {
                 console.error(err);
@@ -54,7 +64,7 @@ function Dashboard() {
         fetchData();
     }, []);
 
-    const conversion = visits === 0 ? 0: ((signups.length / visits) * 100).toFixed(1);
+    const conversion = visits.length === 0 ? 0: ((signups.length / visits.length) * 100).toFixed(1);
 
     function formatDuration(totalSeconds) {
         if (!totalSeconds || totalSeconds < 0) return "0s";
@@ -77,7 +87,28 @@ function Dashboard() {
     const avgSessionSeconds = sessions.length === 0 ? 0 : Math.round(sessions.reduce((acc, s) => acc + (s.duration || 0), 0) / sessions.length / 1000);
 
     const avgSession = formatDuration(avgSessionSeconds);
+    
+    function isToday(date) {
+        const today = new Date();
 
+        return (
+            date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear()
+        );
+    }
+
+    function countToday(items, field) {
+        return items.filter(item => {
+            if (!item[field]) return false;
+
+            const date =
+                item[field].toDate?.() ??
+                new Date(item[field]);
+
+            return isToday(date);
+        }).length;
+    }
 
     return (
     <div className="dashboard">
@@ -124,17 +155,28 @@ function Dashboard() {
         <div className="stats">
             <div className="card">
                 <h3>Total Visits</h3>
-                <h2>{visits}</h2>
+                <h2>{visits.length}</h2>
             </div>
 
             <div className="card">
-                <h3>Waitlist Signups</h3>
+                <h3>Total Signups</h3>
                 <h2>{signups.length}</h2>
             </div>
 
             <div className="card">
                 <h3>Conversion Rate</h3>
                 <h2>{conversion}%</h2>
+            </div>
+
+            <div className="card">
+                <h3>Today's Visits</h3>
+                <h2>{todayVisits}</h2>
+            </div>
+
+
+            <div className="card">
+                <h3>Today's Signups</h3>
+                <h2>{todaySignups}</h2>
             </div>
 
             <div className="card">
@@ -158,11 +200,11 @@ function Dashboard() {
                 </p>
 
                 <p>
-                    {visits === 0
+                    {visits.length === 0
                         ? "Waiting for visitor data."
                         : `Approximately 1 out of every ${Math.max(
                             1,
-                            Math.round(visits / Math.max(signups.length, 1))
+                            Math.round(visits.length / Math.max(signups.length, 1))
                         )} visitors joins the waitlist.`
                     }
                 </p>
