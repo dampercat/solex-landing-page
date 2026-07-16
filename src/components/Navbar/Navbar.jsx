@@ -32,6 +32,10 @@ function Navbar() {
           <a href="#faq">FAQ</a>
         </nav>
 
+        <a href="#waitlist" className="nav-button">
+          Join Waitlist
+        </a>
+
         <button className="menu-btn" aria-label="Open menu" onClick={() => setMenuOpen(!menuOpen)}>
           <Menu size={26} />
         </button>
